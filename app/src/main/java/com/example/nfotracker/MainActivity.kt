@@ -30,7 +30,8 @@ import com.example.nfotracker.ui.theme.NFOTrackerTheme
 
 enum class Screen {
     HOME,
-    NFO_LOGIN
+    NFO_LOGIN,
+    MANAGER_LOGIN
 }
 
 class MainActivity : ComponentActivity() {
@@ -49,16 +50,12 @@ class MainActivity : ComponentActivity() {
                     when (currentScreen) {
                         Screen.HOME -> HomeScreen(
                             onNfoLoginClick = { currentScreen = Screen.NFO_LOGIN },
-                            onManagerLoginClick = {
-                                Toast.makeText(
-                                    context,
-                                    "Manager Login clicked",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            onManagerLoginClick = { currentScreen = Screen.MANAGER_LOGIN }
                         )
 
                         Screen.NFO_LOGIN -> NfoLoginScreen(onBack = { currentScreen = Screen.HOME })
+
+                        Screen.MANAGER_LOGIN -> ManagerLoginScreen(onBack = { currentScreen = Screen.HOME })
                     }
                 }
             }
@@ -142,6 +139,54 @@ fun NfoLoginScreen(onBack: () -> Unit) {
         Button(
             onClick = {
                 Toast.makeText(context, "NFO logged in (dummy)", Toast.LENGTH_SHORT).show()
+                onBack()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Login")
+        }
+    }
+}
+
+@Composable
+fun ManagerLoginScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TextButton(onClick = onBack) {
+            Text(text = "Back")
+        }
+
+        Text(
+            text = "Manager Login",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text(text = "Username") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text(text = "Password") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Button(
+            onClick = {
+                Toast.makeText(context, "Manager logged in (dummy)", Toast.LENGTH_SHORT).show()
                 onBack()
             },
             modifier = Modifier.fillMaxWidth()
