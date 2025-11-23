@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val context = LocalContext.current
             var currentScreen by remember { mutableStateOf(Screen.HOME) }
 
             NFOTrackerTheme {
